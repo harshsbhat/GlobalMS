@@ -1,0 +1,3 @@
+export const preferredRegion = ["cle1"];
+export const dynamic = 'force-dynamic';
+export { POST } from "../test";
