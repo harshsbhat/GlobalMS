@@ -18,7 +18,6 @@ export async function getTests(
 ): Promise<ResponseType | MultiRegionResponse> {
   if (region === "global") {
     const fetchPromises = REGIONS.map(async (regionCode) => {
-      const startTime = performance.now();
 
       try {
         const response = await fetch(`/api/test/${regionCode}`, {
@@ -27,37 +26,30 @@ export async function getTests(
           body: JSON.stringify(requestData),
         });
 
-        const endTime = performance.now();
-        const durationMs = Math.round(endTime - startTime);
-
         if (!response.ok) {
           return {
             region: regionCode,
             status: response.status,
             statusText: response.statusText,
-            durationMs,
             body: `Error: ${response.statusText}`,
             headers: {},
           };
         }
 
         const responseBody = await response.json() as ResponseType;
+        console.log(responseBody)
 
         return {
           ...responseBody,
           region: regionCode,
-          durationMs,
         };
       } catch (error) {
-        const endTime = performance.now();
-        const durationMs = Math.round(endTime - startTime);
         console.error(`Error fetching test results for region ${regionCode}:`, error);
 
         return {
           region: regionCode,
           status: 500,
           statusText: "Internal Server Error",
-          durationMs,
           body: "Error occurred while fetching data",
           headers: {},
         };
@@ -73,7 +65,6 @@ export async function getTests(
     }
   } else if (REGIONS.some((code) => code === region)) {
     try {
-      const startTime = performance.now();
 
       const response = await fetch(`/api/test/${region}`, {
         method: "POST",
@@ -81,21 +72,19 @@ export async function getTests(
         body: JSON.stringify(requestData),
       });
 
-      const endTime = performance.now();
-      const durationMs = Math.round(endTime - startTime);
-
       if (!response.ok) {
         throw new Error(
           `Failed to fetch test results for region ${region}: ${response.statusText}`
         );
       }
-
+  
       const responseBody = await response.json() as ResponseType;
+      console.log(responseBody)
+
 
       return {
         ...responseBody,
         region,
-        durationMs,
       };
     } catch (error) {
       console.error(`Error fetching test results for region ${region}:`, error);

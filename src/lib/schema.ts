@@ -25,5 +25,4 @@ export type ResponseType = z.infer<typeof ResponseSchema>;
 export type MultiRegionResponse = Array<ResponseType & {
   region: string;
   status: number;
-  durationMs: number;
 }>;

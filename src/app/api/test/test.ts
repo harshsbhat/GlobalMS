@@ -35,10 +35,10 @@
 
       const responseData = ResponseSchema.parse({
         status: response.status,
+        durationMs: durationMs, 
         statusText: response.statusText,
         headers: Object.fromEntries(response.headers),
         body: responseBody,
-        durationMs: durationMs, 
       });
 
       return NextResponse.json(responseData);

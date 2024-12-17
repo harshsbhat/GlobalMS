@@ -8,7 +8,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
 import { useToast } from "@/hooks/use-toast"
-import { HttpMethodEnum, type RequestType, type ResponseType } from '@/lib/schema'
+import { HttpMethodEnum, type RequestType, type ResponseType, type MultiRegionResponse } from '@/lib/schema'
 import { getTests } from '@/lib/getTests'
 
 const HTTP_METHODS = HttpMethodEnum.options
@@ -35,13 +35,15 @@ const REGIONS = [
   { label: 'Sydney, Australia', value: 'syd1' },
 ]
 
+
+
 export default function RequestBuilder() {
   const [method, setMethod] = useState<RequestType['method']>('GET')
   const [url, setUrl] = useState('')
   const { toast } = useToast()
   const [headers, setHeaders] = useState('')
   const [body, setBody] = useState('')
-  const [response, setResponse] = useState<ResponseType | null>(null)
+  const [response, setResponse] = useState<ResponseType | MultiRegionResponse |null>(null)
   const [isLoading, setIsLoading] = useState(false)
   const [region, setRegion] = useState('global')
 
@@ -68,10 +70,8 @@ export default function RequestBuilder() {
       const data = await getTests(region, requestData);
   
       if (region === "global") {
-        // Handle the response for global region (MultiRegionResponse)
         setResponse(data as MultiRegionResponse);
       } else {
-        // Handle the response for a specific region (ResponseType)
         setResponse(data as ResponseType);
       }
     } catch (error) {
@@ -159,7 +159,7 @@ export default function RequestBuilder() {
           <div className="bg-muted p-4 rounded-md">
             <Label>
             {Array.isArray(response) ? (
-
+                
                 <ul>
                 {response.map((item, index) => (
                     <li key={index} className='mb-5'>
@@ -174,8 +174,6 @@ export default function RequestBuilder() {
                 <div><strong>Region:</strong> {response?.region}</div>
                 <div><strong>Status:</strong> {response?.status}</div>
                 <div><strong>Duration (ms):</strong> {response?.durationMs}</div>
-                <div><strong>Body:</strong> {response?.body}</div>
-                <div><strong>Headers:</strong> {JSON.stringify(response?.headers)}</div>
                 </div>
             )}
             </Label>
