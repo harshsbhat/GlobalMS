@@ -174,6 +174,7 @@ export default function RequestBuilder() {
                 <div><strong>Region:</strong> {response?.region}</div>
                 <div><strong>Status:</strong> {response?.status}</div>
                 <div><strong>Duration (ms):</strong> {response?.durationMs}</div>
+                <div><strong>Duration (ms):</strong> {response?.body}</div>
                 </div>
             )}
             </Label>
