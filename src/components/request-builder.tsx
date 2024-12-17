@@ -166,6 +166,8 @@ export default function RequestBuilder() {
                     <div className='mb-2'><strong>Region:</strong> {item.region}</div>
                     <div className='mb-2'><strong>Status:</strong> {item.status}</div>
                     <div className='mb-2'><strong>Duration (ms):</strong> {item.durationMs}</div>
+                    <div className='mb-2'><strong>Body (ms):</strong> {item.body}</div>
+                    
                     </li>
                 ))}
                 </ul>
@@ -174,7 +176,7 @@ export default function RequestBuilder() {
                 <div><strong>Region:</strong> {response?.region}</div>
                 <div><strong>Status:</strong> {response?.status}</div>
                 <div><strong>Duration (ms):</strong> {response?.durationMs}</div>
-                <div><strong>Duration (ms):</strong> {response?.body}</div>
+                <div><strong>Body (ms):</strong> {response?.body}</div>
                 </div>
             )}
             </Label>
