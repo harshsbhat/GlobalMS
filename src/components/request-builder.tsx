@@ -10,30 +10,33 @@ import { Label } from "@/components/ui/label"
 import { useToast } from "@/hooks/use-toast"
 import { HttpMethodEnum, type RequestType, type ResponseType, type MultiRegionResponse } from '@/lib/schema'
 import { getTests } from '@/lib/getTests'
+import { Gauge } from 'lucide-react';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 
 const HTTP_METHODS = HttpMethodEnum.options
 
 const REGIONS = [
-  { label: 'Global', value: 'global' },
-  { label: 'Stockholm, Sweden', value: 'arn1' },
-  { label: 'Mumbai, India', value: 'bom1' },
-  { label: 'Paris, France', value: 'cdg1' },
-  { label: 'Cleveland, USA', value: 'cle1' },
-  { label: 'Cape Town, South Africa', value: 'cpt1' },
-  { label: 'Dublin, Ireland', value: 'dub1' },
-  { label: 'Frankfurt, Germany', value: 'fra1' },
-  { label: 'São Paulo, Brazil', value: 'gru1' },
-  { label: 'Hong Kong', value: 'hkg1' },
-  { label: 'Tokyo, Japan', value: 'hnd1' },
-  { label: 'Washington, D.C., USA', value: 'iad1' },
-  { label: 'Seoul, South Korea', value: 'icn1' },
-  { label: 'Osaka, Japan', value: 'kix1' },
-  { label: 'London, United Kingdom', value: 'lhr1' },
-  { label: 'Portland, USA', value: 'pdx1' },
-  { label: 'San Francisco, USA', value: 'sfo1' },
-  { label: 'Singapore', value: 'sin1' },
-  { label: 'Sydney, Australia', value: 'syd1' },
-]
+  { label: '🌐 Global', value: 'global' },
+  { label: '🇸🇪 Stockholm, Sweden', value: 'arn1' },
+  { label: '🇮🇳 Mumbai, India', value: 'bom1' },
+  { label: '🇫🇷 Paris, France', value: 'cdg1' },
+  { label: '🇺🇸 Cleveland, USA', value: 'cle1' },
+  { label: '🇿🇦 Cape Town, South Africa', value: 'cpt1' },
+  { label: '🇮🇪 Dublin, Ireland', value: 'dub1' },
+  { label: '🇩🇪 Frankfurt, Germany', value: 'fra1' },
+  { label: '🇧🇷 São Paulo, Brazil', value: 'gru1' },
+  { label: '🇭🇰 Hong Kong', value: 'hkg1' },
+  { label: '🇯🇵 Tokyo, Japan', value: 'hnd1' },
+  { label: '🇺🇸 Washington, D.C., USA', value: 'iad1' },
+  { label: '🇰🇷 Seoul, South Korea', value: 'icn1' },
+  { label: '🇯🇵 Osaka, Japan', value: 'kix1' },
+  { label: '🇬🇧 London, United Kingdom', value: 'lhr1' },
+  { label: '🇺🇸 Portland, USA', value: 'pdx1' },
+  { label: '🇺🇸 San Francisco, USA', value: 'sfo1' },
+  { label: '🇸🇬 Singapore', value: 'sin1' },
+  { label: '🇦🇺 Sydney, Australia', value: 'syd1' },
+];
+
 
 
 
@@ -155,38 +158,46 @@ export default function RequestBuilder() {
           </div>
         )}
 
-        {response && (
-          <div className="bg-muted p-4 rounded-md">
-            <Label>
-            {Array.isArray(response) ? (
-                
-                <ul>
-                {response.map((item, index) => (
-                    <li key={index} className='mb-5'>
-                    <div className='mb-2'><strong>Region:</strong> {item.region}</div>
-                    <div className='mb-2'><strong>Status:</strong> {item.status}</div>
-                    <div className='mb-2'><strong>Duration (ms):</strong> {item.durationMs}</div>
-                    <div className='mb-2'><strong>Body (ms):</strong> {item.body}</div>
-                    
-                    </li>
-                ))}
-                </ul>
-            ) : (
-                <div>
-                <div><strong>Region:</strong> {response?.region}</div>
-                <div><strong>Status:</strong> {response?.status}</div>
-                <div><strong>Duration (ms):</strong> {response?.durationMs}</div>
-                <div><strong>Body (ms):</strong> {response?.body}</div>
-                </div>
-            )}
-            </Label>
-
-          </div>
+      {response && (
+  <div className="bg-muted p-4 rounded-md overflow-x-auto">
+    <Table>
+      <TableHeader>
+        <TableRow>
+          <TableHead>Location</TableHead>
+          <TableHead>Status</TableHead>
+          <TableHead>Duration (ms)</TableHead>
+        </TableRow>
+      </TableHeader>
+      <TableBody>
+        {Array.isArray(response) ? (
+          response.map((item, index) => {
+            const regionDetails = REGIONS.find(r => r.value === item.region);
+            const location = regionDetails ? regionDetails.label : item.region;
+            return (
+              <TableRow key={index}>
+                <TableCell>{location}</TableCell>
+                <TableCell>{item.status}</TableCell>
+                <TableCell>{item.durationMs}</TableCell>
+              </TableRow>
+            );
+          })
+        ) : (
+          <TableRow>
+            <TableCell>{region === 'global' ? 'Global' : REGIONS.find(r => r.value === region)?.label}</TableCell>
+            <TableCell>{response.status}</TableCell>
+            <TableCell>{response.durationMs}</TableCell>
+          </TableRow>
         )}
+      </TableBody>
+    </Table>
+  </div>
+)}
+
       </CardContent>
       <CardFooter>
         <Button className='w-full' onClick={handleSubmit} disabled={isLoading}>
-          {isLoading ? 'Testing...' : 'Test'}
+          {isLoading ? 'Checking...' : 'Speed Check'}
+          <Gauge />
         </Button>
       </CardFooter>
     </Card>
