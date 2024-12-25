@@ -10,7 +10,7 @@ import { Label } from "@/components/ui/label"
 import { useToast } from "@/hooks/use-toast"
 import { HttpMethodEnum, type RequestType, type ResponseType, type MultiRegionResponse } from '@/lib/schema'
 import { getTests } from '@/lib/getTests'
-import { Gauge } from 'lucide-react';
+import { Gauge, SaveIcon } from 'lucide-react';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 
 const HTTP_METHODS = HttpMethodEnum.options
@@ -94,7 +94,7 @@ export default function RequestBuilder() {
   return (
     <Card className="w-full max-w-3xl mx-auto">
       <CardHeader>
-        <CardTitle>Request Builder</CardTitle>
+        <CardTitle>Global Speed Testing</CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="flex space-x-4">
@@ -169,35 +169,58 @@ export default function RequestBuilder() {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {Array.isArray(response) ? (
-          response.map((item, index) => {
-            const regionDetails = REGIONS.find(r => r.value === item.region);
-            const location = regionDetails ? regionDetails.label : item.region;
-            return (
-              <TableRow key={index}>
-                <TableCell>{location}</TableCell>
-                <TableCell>{item.status}</TableCell>
-                <TableCell>{item.durationMs}</TableCell>
-              </TableRow>
-            );
-          })
-        ) : (
-          <TableRow>
-            <TableCell>{region === 'global' ? 'Global' : REGIONS.find(r => r.value === region)?.label}</TableCell>
-            <TableCell>{response.status}</TableCell>
-            <TableCell>{response.durationMs}</TableCell>
-          </TableRow>
-        )}
-      </TableBody>
+      {Array.isArray(response) ? (
+        response.map((item, index) => {
+          const regionDetails = REGIONS.find(r => r.value === item.region);
+          const location = regionDetails ? regionDetails.label : item.region;
+
+          const statusClass =
+            item.status >= 200 && item.status < 300
+              ? 'text-green-500'
+              : item.status >= 300 && item.status < 400
+              ? 'text-yellow-500'
+              : 'text-red-500';
+
+          return (
+            <TableRow key={index}>
+              <TableCell>{location}</TableCell>
+              <TableCell className={statusClass}>{item.status}</TableCell>
+              <TableCell>{item.durationMs}</TableCell>
+            </TableRow>
+          );
+        })
+      ) : (
+        <TableRow>
+          <TableCell>{region === 'global' ? 'Global' : REGIONS.find(r => r.value === region)?.label}</TableCell>
+          <TableCell
+            className={
+              response.status >= 200 && response.status < 300
+                ? 'text-green-600'
+                : response.status >= 300 && response.status < 400
+                ? 'text-yellow-600'
+                : 'text-red-600'
+            }
+          >
+            {response.status}
+          </TableCell>
+          <TableCell>{response.durationMs}</TableCell>
+        </TableRow>
+      )}
+    </TableBody>
+
     </Table>
   </div>
 )}
 
       </CardContent>
-      <CardFooter>
+      <CardFooter className='flex flex-col gap-2'>
         <Button className='w-full' onClick={handleSubmit} disabled={isLoading}>
           {isLoading ? 'Checking...' : 'Speed Check'}
           <Gauge />
+        </Button>
+        <Button className='w-full border-zinc-800' variant="outline" disabled={isLoading}>
+          {isLoading ? 'Saving...' : 'Save'}
+          <SaveIcon />
         </Button>
       </CardFooter>
     </Card>
