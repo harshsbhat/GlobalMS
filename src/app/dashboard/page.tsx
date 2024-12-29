@@ -1,7 +1,5 @@
-export default function App() {
-  return (
-    <div className="flex justify-center items-center min-h-screen">
-      Dashboard
-    </div>
-  )
+import { redirect } from "next/navigation";
+
+export default async function Page() {
+  return redirect("/dashboard/applications")
 }

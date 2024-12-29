@@ -218,10 +218,6 @@ export default function RequestBuilder() {
           {isLoading ? 'Checking...' : 'Speed Check'}
           <Gauge />
         </Button>
-        <Button className='w-full border-zinc-800' variant="outline" disabled={isLoading}>
-          {isLoading ? 'Saving...' : 'Save'}
-          <SaveIcon />
-        </Button>
       </CardFooter>
     </Card>
   )

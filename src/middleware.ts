@@ -1,8 +1,9 @@
-import { NextResponse, NextRequest } from "next/server";
+import { NextResponse, type NextRequest } from "next/server";
 
 import { jwtVerify, createRemoteJWKSet } from "jose";
 
 const hankoApiUrl = process.env.NEXT_PUBLIC_HANKO_API_URL;
+
 
 export async function middleware(req: NextRequest) {
   const hanko = req.cookies.get("hanko")?.value;
@@ -10,14 +11,14 @@ export async function middleware(req: NextRequest) {
   const JWKS = createRemoteJWKSet(
     new URL(`${hankoApiUrl}/.well-known/jwks.json`)
   );
-
   try {
-    const verifiedJWT = await jwtVerify(hanko ?? "", JWKS);
-  } catch {
-    return NextResponse.redirect(new URL("auth/signup", req.url));
+    const verifiedJWT = await jwtVerify(hanko ?? "", JWKS);    
+  } catch(error) {
+    console.error(error)
+    return NextResponse.redirect(new URL("/auth/signup", req.url));
   }
 }
 
 export const config = {
-  matcher: ["/dashboard", "/app"],
+  matcher: ["/dashboard/(.*)"],
 };
