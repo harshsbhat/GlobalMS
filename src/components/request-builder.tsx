@@ -10,7 +10,7 @@ import { Label } from "@/components/ui/label"
 import { useToast } from "@/hooks/use-toast"
 import { HttpMethodEnum, type RequestType, type ResponseType, type MultiRegionResponse } from '@/lib/schema'
 import { getTests } from '@/lib/getTests'
-import { Gauge, SaveIcon } from 'lucide-react';
+import { Gauge } from 'lucide-react';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 
 const HTTP_METHODS = HttpMethodEnum.options

@@ -33,6 +33,7 @@ export async function getUserData(): Promise<UserData | null> {
     return null;
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const userData: UserData = await response.json(); 
   return userData
 }

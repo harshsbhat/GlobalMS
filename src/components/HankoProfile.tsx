@@ -9,7 +9,7 @@ const hankoApi = env.NEXT_PUBLIC_HANKO_API_URL;
 export default function HankoProfile() {
   useEffect(() => {
     register(hankoApi).catch((error) => {
-      // handle error
+      console.error(error)
     });
   }, []);
 
